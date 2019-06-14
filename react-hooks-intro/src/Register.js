@@ -7,8 +7,20 @@ const initialFormState = {
 }
 export default function Register () {
   const [form, setForm] = useState(initialFormState)
+  const [user, setUser] = useState(null)
 
+  const handleChange = (event) => {
+    setForm({
+      ...form,
+      [event.target.name]: event.target.value
+    })
+  }
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    setUser(form)
+    setForm(initialFormState)
+  }
 
   return (
     <div
@@ -23,26 +35,35 @@ export default function Register () {
           alignItems: 'center',
           justifyItems: 'center'
         }}
+        onSubmit={handleSubmit}
       >
         <input
           type='text'
           placeholder='Username'
           name='username'
+          onChange={handleChange}
+          value={form.username}
         />
 
       <input
           type='email'
           placeholder='Email Address'
           name='email'
+          onChange={handleChange}
+          value={form.email}
         />
 
         <input
           type='password'
           placeholder='Password'
           name='password'
+          onChange={handleChange}
+          value={form.password}
         />
         <button type='submit'>Submit</button>
       </form>
+
+      {user && JSON.stringify(user, null, 2)}
     </div>
   )
 }
