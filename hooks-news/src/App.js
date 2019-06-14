@@ -1,13 +1,13 @@
-import React, {useState, useEffect } from 'react';
+import React, {useState, useEffect, useRef } from 'react';
 
 export default function App() {
   const [results, setResults] = useState([])
   const [query, setQuery] = useState('react hooks')
-
+  const searchInputRef = useRef() // creates a reference object to be attached to an element
   // useEffect with async await & fetch
   useEffect(() => {
     getResults()
-  }, [query]) // will run ComponentWillUpdate after every update to query state
+  }, []) // will run ComponentWillUpdate after every update to query state
   // The second argument can be used to define all the variables (allocated in this array) on which the hook depends.
   // If one of the variables changes, the hook runs again.
   // If the array with the variables is empty, the hook doesn’t run when updating the component at all,
@@ -18,6 +18,17 @@ export default function App() {
       .then(response => response.json());
 
     setResults(response.hits);
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    getResults();
+  }
+
+  const handleClearSearch = () => {
+    setQuery('');
+    console.log(searchInputRef)
+    searchInputRef.current.focus();
   }
 
   // useEffect(() => {
@@ -31,11 +42,20 @@ export default function App() {
 
   return (
     <>
-      <input
-        type="text"
-        onChange={(e) => setQuery(e.target.value)}
-        value={query}
-      />
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          onChange={(e) => setQuery(e.target.value)}
+          value={query}
+          ref={searchInputRef}
+        />
+        <button type="submit">
+          Search
+        </button>
+        <button type="button" onClick={handleClearSearch}>
+          Clear
+        </button>
+      </form>
       <ul>
         {results.map(result => (
           <li key={result.objectID}>
