@@ -4,6 +4,7 @@ export default function App() {
   const [results, setResults] = useState([])
   const [query, setQuery] = useState('react hooks')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
   const searchInputRef = useRef() // creates a reference object to be attached to an element
   // useEffect with async await & fetch
@@ -17,10 +18,15 @@ export default function App() {
 
   const getResults = async () => {
     setLoading(true)
-    const response = await fetch(`http://hn.algolia.com/api/v1/search?query=${query}`)
-      .then(response => response.json());
 
-    setResults(response.hits);
+    try {
+      const response = await fetch(`http://hn.algolia.com/api/v1/search?query=${query}`)
+        .then(response => response.json());
+
+      setResults(response.hits);
+    } catch (e) {
+      setError(e)
+    }
     setLoading(false)
   }
 
@@ -71,6 +77,7 @@ export default function App() {
         </ul>)
       }
 
+      {error && <div>{error.message}</div>}
     </>
   );
 }
