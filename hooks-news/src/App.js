@@ -3,6 +3,8 @@ import React, {useState, useEffect, useRef } from 'react';
 export default function App() {
   const [results, setResults] = useState([])
   const [query, setQuery] = useState('react hooks')
+  const [loading, setLoading] = useState(false)
+
   const searchInputRef = useRef() // creates a reference object to be attached to an element
   // useEffect with async await & fetch
   useEffect(() => {
@@ -14,10 +16,12 @@ export default function App() {
   // because it doesn’t have to watch any variables.
 
   const getResults = async () => {
+    setLoading(true)
     const response = await fetch(`http://hn.algolia.com/api/v1/search?query=${query}`)
       .then(response => response.json());
 
     setResults(response.hits);
+    setLoading(false)
   }
 
   const handleSubmit = (e) => {
@@ -27,7 +31,6 @@ export default function App() {
 
   const handleClearSearch = () => {
     setQuery('');
-    console.log(searchInputRef)
     searchInputRef.current.focus();
   }
 
@@ -56,14 +59,18 @@ export default function App() {
           Clear
         </button>
       </form>
-      <ul>
-        {results.map(result => (
-          <li key={result.objectID}>
-            <a href={result.url}>{result.title}</a>
-          </li>
-        ))
-        }
-      </ul>
+      {loading ? (
+        <div>Loading results...</div>
+      ): (
+        <ul>
+          {results.map(result => (
+            <li key={result.objectID}>
+              <a href={result.url}>{result.title}</a>
+            </li>
+          ))}
+        </ul>)
+      }
+
     </>
   );
 }
