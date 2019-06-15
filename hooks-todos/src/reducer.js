@@ -14,7 +14,12 @@ export default function todosReducer(state, action) {
         ...state,
         todos: toggledTodos
       };
-      break;
+    case 'REMOVE_TODO':
+      const filteredTodos = state.todos.filter(t => t.id !== action.payload.id);
+      return {
+        ...state,
+        todos: filteredTodos
+      };
     default:
       return state;
   }
