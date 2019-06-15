@@ -2,6 +2,13 @@ import uuidv4 from 'uuid/v4';
 export default function todosReducer(state, action) {
   switch (action.type) {
     case 'ADD_TODO':
+      if (!action.payload) {
+        return state;
+      }
+      if (state.todos.findIndex(t => t.text === action.payload) > -1) {
+        // if finds index evaluates to true instead of index , else evaluates to false
+        return state;
+      }
       const newTodo = {
         id: uuidv4(),
         text: action.payload,
@@ -14,6 +21,13 @@ export default function todosReducer(state, action) {
         todos: addedTodos
       };
     case 'UPDATE_TODO':
+      if (!action.payload) {
+        return state;
+      }
+      if (state.todos.findIndex(t => t.text === action.payload) > -1) {
+        // if finds index evaluates to true instead of index , else evaluates to false
+        return state;
+      }
       const updatedTodo = {
         ...state.currentTodo,
         text: action.payload
@@ -33,8 +47,11 @@ export default function todosReducer(state, action) {
       };
     case 'REMOVE_TODO':
       const filteredTodos = state.todos.filter(t => t.id !== action.payload.id);
+      const isRemovedTodo =
+        state.currentTodo.id === action.payload.id ? {} : state.currentTodo;
       return {
         ...state,
+        currentTodo: isRemovedTodo,
         todos: filteredTodos
       };
     case 'SET_CURRENT_TODO':
