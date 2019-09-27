@@ -1,5 +1,5 @@
 import React , { Component }from 'react';
-import './App.css';
+import './App.styles.css';
 import { CardList } from '../components/card-list/CardList';
 import { SearchBox } from '../components/search-box/SearchBox';
 
