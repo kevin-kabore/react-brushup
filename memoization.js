@@ -23,7 +23,7 @@ function memoizedAddTo50(n) {
 }
 
 console.log("1:", memoizedAddTo50(5));
-// Suppose this function takes a long time
-// 1: 55
+// => Suppose this function takes a long time
+// => 1: 55
 console.log("2:", memoizedAddTo50(5)); // does not run the whole fn
-// 2: 55
+// => 2: 55
